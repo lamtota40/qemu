@@ -1,3 +1,7 @@
+pkill qemu-system-x86_64
+ps aux | grep qemu
+kill -9 7195
+
 qemu-system-x86_64 \
   -m 1024 \
   -smp 1 \
