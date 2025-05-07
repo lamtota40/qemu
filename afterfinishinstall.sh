@@ -19,3 +19,17 @@ qemu-system-x86_64 \
   echo "change vnc password"
   echo "pas123"
 } | socat - UNIX-CONNECT:/tmp/qemu-monitor.sock
+
+qemu-system-x86_64 \
+  -m 1024 \
+  -smp 1 \
+  -cpu host \
+  -enable-kvm \
+  -hda /root/lubuntu.img \
+  -boot c \
+  -vnc :1,password \
+  -k en-us \
+  -netdev user,id=mynet,hostfwd=tcp::2222-:22 \
+  -device e1000,netdev=mynet \
+  -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
+
