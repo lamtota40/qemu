@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Path untuk file ISO Lubuntu dan image disk
-LUBUNTU_ISO_URL="https://cdimage.ubuntu.com/lubuntu/releases/18.04/release/lubuntu-18.04.5-desktop-amd64.iso"
-LUBUNTU_ISO="/tmp/lubuntu-18.04.iso"
+LUBUNTU_ISO_URL="https://cdimage.ubuntu.com/lubuntu/releases/18.04/release/lubuntu-18.04-alternate-amd64.iso"
+LUBUNTU_ISO="/tmp/lubuntu-18.04-alternate-amd64.iso"
 LUBUNTU_IMG="/home/$USER/lubuntu.img"
 
 # Ukuran disk image dalam GB
