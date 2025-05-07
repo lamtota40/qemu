@@ -3,7 +3,8 @@
 # Path untuk file ISO Lubuntu dan image disk
 LUBUNTU_ISO_URL="https://cdimage.ubuntu.com/lubuntu/releases/18.04/release/lubuntu-18.04-alternate-amd64.iso"
 LUBUNTU_ISO="/tmp/lubuntu-18.04-alternate-amd64.iso"
-LUBUNTU_IMG="/home/$USER/lubuntu.img"
+#LUBUNTU_IMG="/home/$USER/lubuntu.img"
+LUBUNTU_IMG="/root/lubuntu.img"
 
 # Ukuran disk image dalam GB
 DISK_SIZE=20
