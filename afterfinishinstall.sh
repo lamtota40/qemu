@@ -33,3 +33,6 @@ qemu-system-x86_64 \
   -device e1000,netdev=mynet \
   -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
 
+
+dd if=/root/lubuntu.img bs=1M | gzip > /root/lubuntu-backup.img.gz
+gzip -dc /root/lubuntu-backup.img.gz | dd of=/root/lubuntu.img bs=1M status=progress
