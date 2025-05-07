@@ -9,7 +9,7 @@ qemu-system-x86_64 \
   -smp 1 \
   -cpu host \
   -enable-kvm \
-  -hda /root/lubuntu.img \
+  -hda /root/lubuntu.qcow2 \
   -boot c \
   -vnc :1,password \
   -k en-us \
