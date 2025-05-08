@@ -13,3 +13,4 @@ MD5 Hash Resmi ISO XP x64 SP2
 Ukuran file: Sekitar 620 MB
 Versi bahasa: English (US)
 Jenis lisensi: Retail (bukan volume license)
+https://archive.org/details/en_win_xp_pro_x64_with_sp2
