@@ -1,6 +1,16 @@
+#!/bin/bash
+
 pkill qemu-system-x86_64
-ps aux | grep qemu
-kill -9 7195
+# Cari PID QEMU yang sedang berjalan
+QEMU_PIDS=$(ps aux | grep '[q]emu-system' | awk '{print $2}')
+
+if [ -z "$QEMU_PIDS" ]; then
+  echo "Tidak ada proses QEMU yang ditemukan."
+else
+  kill -9 $QEMU_PIDS
+  echo "Ditemukan dengam PID: $QEMU_PIDS dan berhasil kill."
+fi
+
 
 qemu-system-x86_64 \
   -m 1024 \
