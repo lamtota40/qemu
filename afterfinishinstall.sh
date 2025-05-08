@@ -2,8 +2,6 @@ pkill qemu-system-x86_64
 ps aux | grep qemu
 kill -9 7195
 
-qemu-img create -f qcow2 /root/lubuntu.qcow2 18G
-
 qemu-system-x86_64 \
   -m 1024 \
   -smp 1 \
