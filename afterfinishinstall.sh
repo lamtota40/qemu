@@ -30,6 +30,7 @@ qemu-system-x86_64 \
 
 #kompres&backup
 qemu-img convert -c -O qcow2 /root/lubuntu.qcow2 /root/lubuntu-compress.qcow2
+rsync -avz -e ssh /lokal/path/file.txt user@ip_tujuan:/path/tujuan/
 
 #restore
 qemu-img convert -O raw /root/lubuntu-compress.qcow2 - | dd of=/dev/vda bs=4M status=progress
