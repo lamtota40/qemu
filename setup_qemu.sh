@@ -26,7 +26,7 @@ fi
 echo "[3/6] Mengecek image disk..."
 if [ ! -f "$LUBUNTU_IMG" ]; then
   echo "Membuat disk image $DISK_SIZE..."
-  qemu-img create -f raw "$LUBUNTU_IMG" $DISK_SIZE
+  qemu-img create -f qcow2 "$LUBUNTU_IMG" $DISK_SIZE
 else
   echo "Image sudah ada di $LUBUNTU_IMG"
 fi
