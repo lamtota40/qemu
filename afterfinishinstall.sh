@@ -32,5 +32,5 @@ qemu-system-x86_64 \
 qemu-img convert -c -O qcow2 /root/lubuntu.qcow2 /root/lubuntu-compress.qcow2
 
 #restore
-qemu-img convert -O raw /root/compress.qcow2 - | dd of=/dev/vda bs=4M status=progress
+qemu-img convert -O raw /root/lubuntu-compress.qcow2 - | dd of=/dev/vda bs=4M status=progress
 sync
