@@ -14,3 +14,9 @@ Ukuran file: Sekitar 620 MB
 Versi bahasa: English (US)
 Jenis lisensi: Retail (bukan volume license)
 https://archive.org/details/en_win_xp_pro_x64_with_sp2
+
+
+55B4F7A599D4C9D91E0F8A63D17E1E0C
+Ukuran: Sekitar 3.1 GB
+en_windows_7_ultimate_with_sp1_x64_dvd_u_677460.iso
+
