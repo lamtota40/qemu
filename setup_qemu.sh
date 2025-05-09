@@ -4,7 +4,7 @@
 LUBUNTU_ISO_URL="https://mirrors.mit.edu/ubuntu-cdimage/lubuntu/releases/18.04/release/lubuntu-18.04-alternate-amd64.iso"
 LUBUNTU_ISO="/root/lubuntu-18.04-alternate-amd64.iso"
 LUBUNTU_IMG="/root/lubuntu.qcow2"
-DISK_SIZE=18G
+DISK_SIZE=18.6G
 VNC_PASSWORD="pas123"
 MONITOR_SOCKET="/tmp/qemu-monitor.sock"
 
