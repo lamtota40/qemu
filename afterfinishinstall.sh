@@ -19,7 +19,7 @@ qemu-system-x86_64 \
   -boot c \
   -vnc :1,password \
   -k en-us \
-  -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::5910-:5901 \
+  -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::5911-:5901 \
   -device e1000,netdev=mynet \
   -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
 
@@ -29,10 +29,10 @@ qemu-system-x86_64 \
 } | socat - UNIX-CONNECT:/tmp/qemu-monitor.sock
 
 #kompres&backup
-qemu-img convert -c -O qcow2 /root/lubuntu.qcow2 /root/lubuntu-compress.qcow2
-rsync -avz -e ssh /lokal/path/file.txt user@ip_tujuan:/path/tujuan/
+#qemu-img convert -c -O qcow2 /root/lubuntu.qcow2 /root/lubuntu-compress.qcow2
+#rsync -avz -e ssh /lokal/path/file.txt user@ip_tujuan:/path/tujuan/
 
 #restore
-sudo apt install qemu-utils -y
-qemu-img convert -O raw /root/lubuntu-compress.qcow2 - | dd of=/dev/vda bs=4M status=progress
-sync
+#sudo apt install qemu-utils -y
+#qemu-img convert -O raw /root/lubuntu-compress.qcow2 - | dd of=/dev/vda bs=4M status=progress
+#sync
