@@ -23,7 +23,7 @@ qemu-system-x86_64 \
   -device e1000,netdev=mynet \
   -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
 
-  {
+{
   echo "change vnc password"
   echo "pas123"
 } | socat - UNIX-CONNECT:/tmp/qemu-monitor.sock
