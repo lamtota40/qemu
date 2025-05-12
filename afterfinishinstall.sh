@@ -19,7 +19,7 @@ qemu-system-x86_64 \
   -boot c \
   -vnc :1,password \
   -k en-us \
-  -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::5911-:5901 \
+  -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::5911-:5900 \
   -device e1000,netdev=mynet \
   -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
 sleep 5
