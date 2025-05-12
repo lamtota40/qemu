@@ -22,7 +22,7 @@ qemu-system-x86_64 \
   -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::5911-:5901 \
   -device e1000,netdev=mynet \
   -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
-
+sleep 5
 {
   echo "change vnc password"
   echo "pas123"
