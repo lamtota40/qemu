@@ -27,7 +27,8 @@ case $choice in
   1)
    apt update
    apt install -y qemu qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager wget x11vnc socat
-   
+   mkdir -p /root/.vnc
+   x11vnc -storepasswd "$VNC_PASSWORD" /root/.vnc/passwd
     pause
     ;;
   2)
@@ -41,7 +42,7 @@ case $choice in
     ;;
   4)
     clear
-  
+    qemu-img create -f qcow2 "$LUBUNTU_IMG" $DISK_SIZE
     pause
     ;;
   0)
