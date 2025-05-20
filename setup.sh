@@ -25,7 +25,8 @@ read -p "Enter your choice number: " choice
 
 case $choice in
   1)
-   
+   apt update
+   apt install -y qemu qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager wget x11vnc socat
    
     pause
     ;;
