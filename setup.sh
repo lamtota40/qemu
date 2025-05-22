@@ -33,7 +33,21 @@ case $choice in
     pause
     ;;
   2)
-    
+  read -e -i 1024 -p "sett ram (Mb) : " setram
+  read -e -i 1 -p "sett core cpu : " setcpu
+    qemu-system-x86_64 \
+       -m $setram \
+       -smp $setcpu \
+       -cpu host \
+       -enable-kvm \
+       -hda "$sethdd" \
+       -cdrom "$setiso" \
+       -boot d \
+       -vnc :1,password \
+       -k en-us \
+       -net nic \
+       -net user \
+       -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
     pause
     ;;
   3)
