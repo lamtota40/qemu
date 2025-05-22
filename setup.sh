@@ -57,7 +57,6 @@ case $choice in
        -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
 
        sleep 3
-echo "[6/6] Mengatur password VNC via monitor socket..."
 {
   echo "change vnc password"
   echo "$VNC_PASSWORD"
