@@ -35,8 +35,8 @@ case $choice in
   2)
   read -e -i 1024 -p "sett ram (Mb) : " setram
   read -e -i 1 -p "sett core cpu : " setcpu
-  read -e -i "/root/lubuntu.qcow2" -p "sett location & file cow2 : " sethdd
-  read -e -i "/root/lubuntu-18.04-alternate-amd64.iso" -p "Sett iso instalation OS : " setiso
+  read -e -i "$Home/ubuntu.qcow2" -p "sett location & file cow2 : " sethdd
+  read -e -i "$Home/lubuntu-18.04-alternate-amd64.iso" -p "Sett iso instalation OS : " setiso
     qemu-system-x86_64 \
        -m $setram \
        -smp $setcpu \
