@@ -33,10 +33,15 @@ case $choice in
     pause
     ;;
   2)
+  LINKISO="https://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/mini.iso"
   read -e -i 1024 -p "sett ram (Mb) : " setram
   read -e -i 1 -p "sett core cpu : " setcpu
   read -e -i "$Home/ubuntu.qcow2" -p "sett location & file cow2 : " sethdd
-  read -e -i "$Home/lubuntu-18.04-alternate-amd64.iso" -p "Sett iso instalation OS : " setiso
+  read -e -i "$LINKISO" -p "Sett link iso instalation OS : " setiso
+  if [ ! -f "$Home/mini.iso" ]; then
+  echo "Mengunduh ISO Lubuntu..."
+  wget https://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/mini.iso
+  fi
     qemu-system-x86_64 \
        -m $setram \
        -smp $setcpu \
