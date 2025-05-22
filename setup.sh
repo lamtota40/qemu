@@ -50,6 +50,13 @@ case $choice in
        -net nic \
        -net user \
        -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
+
+       sleep 3
+echo "[6/6] Mengatur password VNC via monitor socket..."
+{
+  echo "change vnc password"
+  echo "$VNC_PASSWORD"
+} | socat - UNIX-CONNECT:$MONITOR_SOCKET
     pause
     ;;
   3)
