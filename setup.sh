@@ -27,6 +27,8 @@ case $choice in
   1)
    apt update
    apt install -y qemu qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager wget x11vnc socat
+   read -p "settup your password vnc: " VNC_PASSWORD
+   
    mkdir -p /root/.vnc
    x11vnc -storepasswd "$VNC_PASSWORD" /root/.vnc/passwd
     pause
