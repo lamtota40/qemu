@@ -25,6 +25,7 @@ read -p "Enter your choice number: " choice
 
 case $choice in
   1)
+  clear
     sudo apt update
     sudo apt install -y qemu qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager wget x11vnc socat
     read -e -i "pass123" -p "settup your password vnc: " VNC_PASSWORD
@@ -33,6 +34,7 @@ case $choice in
     pause
     ;;
   2)
+  clear
   LINKISO="https://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/mini.iso"
   read -e -i 1024 -p "sett ram (Mb) : " setram
   read -e -i 1 -p "sett core cpu : " setcpu
@@ -66,6 +68,7 @@ echo "Gunakan VNC Viewer dan login dengan password: $VNC_PASSWORD"
     pause
     ;;
   3)
+  clear
   pkill qemu-system-x86_64
 # Cari PID QEMU yang sedang berjalan
 QEMU_PIDS=$(ps aux | grep '[q]emu-system' | awk '{print $2}')
@@ -83,6 +86,7 @@ qemu-system-x86_64 \
   -enable-kvm \
   -hda $sethdd \
   -boot c \
+  -drive file=external_hdd.qcow2,format=qcow2,if=virtio \
   -vnc :1,password \
   -k en-us \
   -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::5911-:5900 \
