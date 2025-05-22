@@ -1,164 +1,174 @@
 #!/bin/bash
+# qemu-rev4.sh
 
-CONFIG_FILE="setqemu.conf"
-[ -f "$CONFIG_FILE" ] && source "$CONFIG_FILE"
+CONFIG_FILE="./setqemu.conf"
+source "$CONFIG_FILE" 2>/dev/null || touch "$CONFIG_FILE"
 
+# Fungsi pause
 pause() {
   read -p "Press Enter to return to the menu..."
 }
 
-save_config() {
-cat > "$CONFIG_FILE" <<EOF
-VNC_PASSWORD="$VNC_PASSWORD"
-setcpu="$setcpu"
-setram="$setram"
-sethdd="$sethdd"
-setiso="$setiso"
-external_disk="$external_disk"
-EOF
-}
-
+# Fungsi tampilkan info sistem
 display_info() {
   echo "========================================"
-  echo "         QEMU MANAGER"
+  echo "           QEMU MANAGER"
   echo "========================================"
+
   if command -v qemu-system-x86_64 &> /dev/null; then
-    echo "Status QEMU     : Installed"
+    echo "QEMU Status     : Installed"
   else
-    echo "Status QEMU     : Not Installed"
+    echo "QEMU Status     : Not Installed"
   fi
 
-  CPU_CORES=$(nproc)
-  CPU_SPEED=$(lscpu | grep "MHz" | awk '{print int($3)}')
-  echo "Core CPU        : ${CPU_CORES} core | ${CPU_SPEED} MHz"
+  cpu_core=$(nproc)
+  cpu_speed=$(awk -F: '/MHz/ {print int($2); exit}' /proc/cpuinfo)
+  echo "CPU Core/Speed  : $cpu_core core | ${cpu_speed}MHz"
 
-  if [[ $(egrep -c '(vmx|svm)' /proc/cpuinfo) -gt 0 ]]; then
-    echo "Type            : KVM | Virtualization Enabled"
-  else
-    echo "Type            : Unknown | Virtualization Not Supported"
+  virt_type=$(systemd-detect-virt)
+  if [[ "$virt_type" == "none" ]]; then
+    virt_type="Bare Metal"
   fi
+  echo "Type            : kvm | $virt_type"
 
-  ram_total=$(free -m | awk '/Mem:/ {print $2}')
-  ram_used=$(free -m | awk '/Mem:/ {print $3}')
-  ram_free=$(free -m | awk '/Mem:/ {print $4}')
-  ram_percent=$(($ram_used * 100 / $ram_total))
-  echo "RAM             : Usage: ${ram_used}MB (${ram_percent}%) | Free: ${ram_free}MB | Total: ${ram_total}MB"
+  read mem_total mem_used <<< $(free -m | awk '/^Mem:/ {print $2, $3}')
+  mem_free=$((mem_total - mem_used))
+  mem_percent=$((mem_used * 100 / mem_total))
+  echo "RAM             : Usage: ${mem_used}MB (${mem_percent}%) | Free: ${mem_free}MB | Total: ${mem_total}MB"
 
-  swap_total=$(free -m | awk '/Swap:/ {print $2}')
-  swap_used=$(free -m | awk '/Swap:/ {print $3}')
-  swap_free=$(free -m | awk '/Swap:/ {print $4}')
+  read swap_total swap_used <<< $(free -m | awk '/^Swap:/ {print $2, $3}')
+  swap_free=$((swap_total - swap_used))
   if [[ "$swap_total" -gt 0 ]]; then
-    swap_percent=$(($swap_used * 100 / $swap_total))
+    swap_percent=$((swap_used * 100 / swap_total))
   else
     swap_percent=0
   fi
   echo "Swap RAM        : Usage: ${swap_used}MB (${swap_percent}%) | Free: ${swap_free}MB | Total: ${swap_total}MB"
 
-  hdd_usage=$(df -h / | awk 'NR==2 {print $3}')
-  hdd_free=$(df -h / | awk 'NR==2 {print $4}')
-  hdd_total=$(df -h / | awk 'NR==2 {print $2}')
-  hdd_percent=$(df -h / | awk 'NR==2 {print $5}')
-  echo "HDD             : Usage: ${hdd_usage} (${hdd_percent}) | Free: ${hdd_free} | Total: ${hdd_total}"
+  hdd_usage=$(df -h --total | awk '/total/ {print $3}')
+  hdd_total=$(df -h --total | awk '/total/ {print $2}')
+  hdd_free=$(df -h --total | awk '/total/ {print $4}')
+  hdd_percent=$(df -h --total | awk '/total/ {print $5}')
+  echo "HDD             : Usage: $hdd_usage ($hdd_percent) | Free: $hdd_free | Total: $hdd_total"
+
   echo "========================================"
 }
 
-while true; do
-  clear
-  display_info
-  echo ""
-  echo "1. Install QEMU"
-  echo "2. Install OS"
-  echo "3. Running OS"
-  echo "4. Create disk"
-  echo "0. Exit Program"
-  echo "========================================"
-  read -p "Enter your choice number: " choice
+clear
+display_info
+echo ""
+echo "1. Install QEMU"
+echo "2. Install OS"
+echo "3. Run OS"
+echo "4. Create Disk"
+echo "0. Exit"
+echo "========================================"
+read -p "Enter your choice number: " choice
 
-  case $choice in
-    1)
-      sudo apt update
-      sudo apt install -y qemu qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager wget x11vnc socat
-      clear
-      echo "Installasi QEMU telah berhasil."
-      read -e -i "pass123" -p "Set VNC password: " VNC_PASSWORD
-      sudo mkdir -p /root/.vnc
-      sudo x11vnc -storepasswd "$VNC_PASSWORD" /root/.vnc/passwd
-      save_config
+case $choice in
+  1)
+    sudo apt update
+    sudo apt install -y qemu qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager wget x11vnc socat
+    clear
+    echo "Instalasi Qemu telah selesai.."
+    read -e -i "pass123" -p "Set your VNC password: " vncpassword
+    mkdir -p /root/.vnc
+    x11vnc -storepasswd "$vncpassword" /root/.vnc/passwd
+    echo "vncpassword=$vncpassword" > "$CONFIG_FILE"
+    pause
+    ;;
+  2)
+    if ! command -v qemu-system-x86_64 &>/dev/null; then
+      echo "Silahkan pilih no 1 terlebih dahulu karena QEMU belum terinstal."
       pause
-      ;;
-    2)
-      LINKISO="https://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/mini.iso"
-      read -e -i 1024 -p "Set RAM (MB): " setram
-      read -e -i 1 -p "Set CPU core: " setcpu
-      read -e -i "$HOME/ubuntu.qcow2" -p "Set main disk path: " sethdd
-      read -e -i "$LINKISO" -p "Set ISO URL or path: " setiso
-      if [ ! -f "$setiso" ]; then
-        echo "Downloading ISO..."
-        wget -O mini.iso "$LINKISO"
-        setiso="mini.iso"
-      fi
-      save_config
-      qemu-system-x86_64 \
-        -m "$setram" \
-        -smp "$setcpu" \
-        -cpu host \
-        -enable-kvm \
-        -hda "$sethdd" \
-        -cdrom "$setiso" \
-        -boot d \
-        -vnc :1,password \
-        -k en-us \
-        -net nic \
-        -net user \
-        -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
-      sleep 3
-      {
-        echo "change vnc password"
-        echo "$VNC_PASSWORD"
-      } | socat - UNIX-CONNECT:/tmp/qemu-monitor.sock
-      echo "QEMU is running with VNC on localhost:5901"
+      exit
+    fi
+    LINKISO="https://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/mini.iso"
+    read -e -i 1024 -p "Set RAM (MB): " setcpu_ram
+    read -e -i 1 -p "Set core CPU: " setcpu_core
+    read -e -i "$HOME/ubuntu.qcow2" -p "Set disk image path: " disk_image
+    read -e -i "$LINKISO" -p "Set ISO URL: " iso_url
+
+    echo "setcpu_ram=$setcpu_ram" >> "$CONFIG_FILE"
+    echo "setcpu_core=$setcpu_core" >> "$CONFIG_FILE"
+    echo "disk_image=$disk_image" >> "$CONFIG_FILE"
+    echo "iso_url=$iso_url" >> "$CONFIG_FILE"
+    echo "external_disk=external_hdd.qcow2" >> "$CONFIG_FILE"
+
+    if [ ! -f mini.iso ]; then
+      wget "$LINKISO" -O mini.iso
+    fi
+
+    qemu-system-x86_64 \
+      -m "$setcpu_ram" \
+      -smp "$setcpu_core" \
+      -cpu host \
+      -enable-kvm \
+      -hda "$disk_image" \
+      -cdrom mini.iso \
+      -boot d \
+      -vnc :1,password \
+      -k en-us \
+      -net nic \
+      -net user \
+      -monitor unix:/tmp/qemu-monitor.sock,server,nowait \
+      -drive file=external_hdd.qcow2,format=qcow2,if=virtio &
+
+    sleep 3
+    {
+      echo "change vnc password"
+      echo "$vncpassword"
+    } | socat - UNIX-CONNECT:/tmp/qemu-monitor.sock
+
+    echo "QEMU is running. Access via VNC on localhost:5901"
+    pause
+    ;;
+  3)
+    if ! command -v qemu-system-x86_64 &>/dev/null; then
+      echo "Silahkan pilih no 1 terlebih dahulu karena QEMU belum terinstal."
       pause
-      ;;
-    3)
-      pkill qemu-system-x86_64
-      external_disk="$HOME/external_hdd.qcow2"
-      [ ! -f "$external_disk" ] && qemu-img create -f qcow2 "$external_disk" 10G
-      save_config
-      qemu-system-x86_64 \
-        -m "$setram" \
-        -smp "$setcpu" \
-        -cpu host \
-        -enable-kvm \
-        -hda "$sethdd" \
-        -boot c \
-        -vnc :1,password \
-        -k en-us \
-        -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::5911-:5900 \
-        -device e1000,netdev=mynet \
-        -drive file="$external_disk",format=qcow2,if=virtio \
-        -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
-      sleep 3
-      {
-        echo "change vnc password"
-        echo "$VNC_PASSWORD"
-      } | socat - UNIX-CONNECT:/tmp/qemu-monitor.sock
-      echo "QEMU with external disk is running..."
-      pause
-      ;;
-    4)
-      read -e -i "$HOME/ubuntu.qcow2" -p "Enter disk path: " fileqcow
-      read -e -i 18 -p "Set disk size (GB): " setsizehdd
-      qemu-img create -f qcow2 "$fileqcow" "${setsizehdd}G"
-      echo "Disk created: $fileqcow"
-      pause
-      ;;
-    0)
-      echo "Exiting program."
-      exit 0
-      ;;
-    *)
-      echo "Unknown choice."
-      pause
-      ;;
-  esac
-done
+      exit
+    fi
+
+    source "$CONFIG_FILE"
+    pkill qemu-system-x86_64
+
+    qemu-system-x86_64 \
+      -m "$setcpu_ram" \
+      -smp "$setcpu_core" \
+      -cpu host \
+      -enable-kvm \
+      -hda "$disk_image" \
+      -boot c \
+      -vnc :1,password \
+      -k en-us \
+      -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::5911-:5900 \
+      -device e1000,netdev=mynet \
+      -monitor unix:/tmp/qemu-monitor.sock,server,nowait \
+      -drive file=external_hdd.qcow2,format=qcow2,if=virtio &
+
+    sleep 3
+    {
+      echo "change vnc password"
+      echo "$vncpassword"
+    } | socat - UNIX-CONNECT:/tmp/qemu-monitor.sock
+
+    echo "QEMU running. VNC available on localhost:5901"
+    pause
+    ;;
+  4)
+    read -e -i 18 -p "Set disk size (GB): " disk_size
+    read -e -i "$HOME/ubuntu.qcow2" -p "Set output file (.qcow2): " fileqcow
+    qemu-img create -f qcow2 "$fileqcow" "${disk_size}G"
+    echo "Created disk: $fileqcow with size ${disk_size}G"
+    pause
+    ;;
+  0)
+    echo "Exiting."
+    exit 0
+    ;;
+  *)
+    echo "Invalid choice."
+    pause
+    ;;
+esac
