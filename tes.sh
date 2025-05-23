@@ -26,10 +26,17 @@ display_info() {
   echo "           QEMU MANAGER"
   echo "========================================"
 
+QEMU_PIDS=$(ps aux | grep '[q]emu-system' | awk '{print $2}')
+if [ -z "$QEMU_PIDS" ]; then
+  stat="Not Runing"
+else
+  stat="Runing PID: $QEMU_PIDS"
+fi
+
   if command -v qemu-system-x86_64 &> /dev/null; then
-    echo "QEMU Status     : Installed"
+    echo "QEMU Status     : Installed | $stat"
   else
-    echo "QEMU Status     : Not Installed"
+    echo "QEMU Status     : Not Installed | $stat"
   fi
 
   cpu_core=$(nproc)
@@ -190,7 +197,7 @@ fi
     ;;
   4)
     read -e -i 18 -p "Set disk size (GB): " disk_size
-    read -e -i "$HOME/ubuntu.qcow2" -p "Set output file (.qcow2): " fileqcow
+    read -e -i "$HOME/ubuntu.qcow2" -p "Set file name (.qcow2): " fileqcow
     qemu-img create -f qcow2 "$fileqcow" "${disk_size}G"
     echo "Created disk: $fileqcow with size ${disk_size}G"
     pause
