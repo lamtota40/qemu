@@ -111,8 +111,7 @@ case $choice in
       -k en-us \
       -net nic \
       -net user \
-      -monitor unix:/tmp/qemu-monitor.sock,server,nowait \
-      -drive file=external_hdd.qcow2,format=qcow2,if=virtio &
+      -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
 
     sleep 3
     {
@@ -142,10 +141,10 @@ case $choice in
       -boot c \
       -vnc :1,password \
       -k en-us \
+      -drive file=external_hdd.qcow2,format=qcow2,if=virtio
       -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::5911-:5900 \
       -device e1000,netdev=mynet \
-      -monitor unix:/tmp/qemu-monitor.sock,server,nowait \
-      -drive file=external_hdd.qcow2,format=qcow2,if=virtio &
+      -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
 
     sleep 3
     {
