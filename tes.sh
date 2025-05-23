@@ -9,7 +9,7 @@ pause() {
   read -p "Press Enter to return to the menu..."
 }
 # Fungsi kill
-kill(){
+kill_qemu(){
 pkill qemu-system-x86_64
 QEMU_PIDS=$(ps aux | grep '[q]emu-system' | awk '{print $2}')
 if [ -z "$QEMU_PIDS" ]; then
@@ -107,7 +107,7 @@ case $choice in
       pause
       exit
     fi
-    kill
+    kill_qemu
     LINKISO="https://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/mini.iso"
     read -e -i 1024 -p "Set RAM (MB): " setcpu_ram
     read -e -i 1 -p "Set core CPU: " setcpu_core
@@ -154,7 +154,7 @@ case $choice in
     fi
 
     source "$CONFIG_FILE"
-    kill
+    kill_qemu
 
     qemu-system-x86_64 \
       -m "$setcpu_ram" \
