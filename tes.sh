@@ -77,7 +77,7 @@ fi
 
   echo "========================================"
 }
-
+while true; do
 clear
 display_info
 echo ""
@@ -204,3 +204,4 @@ fi
     pause
     ;;
 esac
+done
