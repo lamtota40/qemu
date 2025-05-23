@@ -125,7 +125,7 @@ case $choice in
       -net user \
       -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
 
-    sleep 3
+    sleep 5
     {
       echo "change vnc password"
       echo "$vncpassword"
@@ -158,7 +158,7 @@ case $choice in
       -device e1000,netdev=mynet \
       -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
 
-    sleep 3
+    sleep 5
     {
       echo "change vnc password"
       echo "$vncpassword"
