@@ -102,6 +102,21 @@ case $choice in
     sudo apt install -y qemu qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager wget x11vnc socat
     clear
     echo "Instalasi Qemu telah selesai.."
+    while true; do
+  read -e -i 18 -p "Set disk size (GB): " disk_size
+if [[ "$disk_size" =~ ^[0-9]+$ ]] && [ "$disk_size" -ge 10 ]; then
+    break
+  else
+    echo "Input tidak valid. Masukkan angka saja dan minimal 10GB."
+  fi
+done
+
+read -e -i "ubuntu" -p "Set file name: " filename
+fileqcow="$HOME/${filename}.qcow2"
+    qemu-img create -f qcow2 "$fileqcow" "${disk_size}G"
+    echo "Created disk: $fileqcow with size ${disk_size}G"
+    echo "disk_image=$fileqcow" > "$CONFIG_FILE"
+    
     read -e -i "pass123" -p "Set your VNC password: " vncpassword
     mkdir -p /root/.vnc
     x11vnc -storepasswd "$vncpassword" /root/.vnc/passwd
