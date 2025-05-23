@@ -1,5 +1,5 @@
 #!/bin/bash
-# qemu-rev6.sh
+# qemu-rev8.sh
 
 CONFIG_FILE="./setqemu.conf"
 source "$CONFIG_FILE" 2>/dev/null || touch "$CONFIG_FILE"
