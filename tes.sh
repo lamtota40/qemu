@@ -92,6 +92,7 @@ echo "1. Install QEMU"
 echo "2. Install OS"
 echo "3. Run OS"
 echo "4. Create Disk"
+echo "5. Stop Runing"
 echo "0. Exit"
 echo "========================================"
 read -p "Enter your choice number: " choice
@@ -226,6 +227,33 @@ fileqcow="$HOME/${filename}.qcow2"
     echo "Created disk: $fileqcow with size ${disk_size}G"
     pause
     ;;
+  5)
+    echo "Stop QEMU:"
+    echo "1. Stop (system_powerdown)"
+    echo "2. Forced Stop (possible data loss!)"
+    read -p "Pilih sub-menu: " stop_choice
+
+    case $stop_choice in
+      1)
+        if [ -S /tmp/qemu-monitor.sock ]; then
+          echo "system_powerdown" | socat - UNIX-CONNECT:/tmp/qemu-monitor.sock
+          echo "Perintah shutdown telah dikirim ke QEMU."
+        else
+          echo "Socket /tmp/qemu-monitor.sock tidak ditemukan. QEMU mungkin tidak berjalan."
+        fi
+        pause
+        ;;
+      2)
+        kill_qemu
+        pause
+        ;;
+      *)
+        echo "Pilihan tidak valid."
+        pause
+        ;;
+    esac
+    ;;
+
   0)
     echo "Exiting."
     exit 0
