@@ -47,7 +47,7 @@ fi
   read mem_total mem_used <<< $(free -m | awk '/^Mem:/ {print $2, $3}')
   mem_free=$((mem_total - mem_used))
   mem_percent=$((mem_used * 100 / mem_total))
-  echo "RAM             : Usage: ${mem_used}MB (${mem_percent}%) | Free: ${mem_free}MB | Total: ${mem_total}MB"
+  echo "RAM             : Usage: ${mem_used} MB (${mem_percent}%) | Free: ${mem_free} MB | Total: ${mem_total} MB"
 
   read swap_total swap_used <<< $(free -m | awk '/^Swap:/ {print $2, $3}')
   swap_free=$((swap_total - swap_used))
@@ -56,7 +56,7 @@ fi
   else
     swap_percent=0
   fi
-  echo "Swap RAM        : Usage: ${swap_used}MB (${swap_percent}%) | Free: ${swap_free}MB | Total: ${swap_total}MB"
+  echo "Swap RAM        : Usage: ${swap_used} MB (${swap_percent}%) | Free: ${swap_free} MB | Total: ${swap_total} MB"
 
   hdd_usage=$(df -h --total | awk '/total/ {print $3}')
   hdd_total=$(df -h --total | awk '/total/ {print $2}')
