@@ -196,8 +196,17 @@ fi
     pause
     ;;
   4)
-    read -e -i 18 -p "Set disk size (GB): " disk_size
-    read -e -i "$HOME/ubuntu.qcow2" -p "Set file name (.qcow2): " fileqcow
+  while true; do
+  read -e -i 18 -p "Set disk size (GB): " disk_size
+if [[ "$disk_size" =~ ^[0-9]+$ ]] && [ "$disk_size" -ge 10 ]; then
+    break
+  else
+    echo "Input tidak valid. Masukkan angka saja dan minimal 10GB."
+  fi
+done
+
+read -e -i "ubuntu" -p "Set file name: " filename
+fileqcow="$HOME/${filename}.qcow2"
     qemu-img create -f qcow2 "$fileqcow" "${disk_size}G"
     echo "Created disk: $fileqcow with size ${disk_size}G"
     pause
