@@ -120,7 +120,7 @@ case $choice in
     echo "iso_url=$iso_url" >> "$CONFIG_FILE"
 
     if [ ! -f mini.iso ]; then
-      wget "$LINKISO" -O mini.iso
+      wget -q --show-progress "$LINKISO" -O mini.iso
     fi
 
     qemu-system-x86_64 \
