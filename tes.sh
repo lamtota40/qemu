@@ -108,6 +108,12 @@ case $choice in
       exit
     fi
     kill_qemu
+    source "$CONFIG_FILE"
+if [ -z "$vncpassword" ]; then
+  read -e -i "pass123" -p "Set your VNC password: " vncpassword
+  echo "vncpassword=$vncpassword" >> "$CONFIG_FILE"
+fi
+
     LINKISO="https://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/mini.iso"
     read -e -i 1024 -p "Set RAM (MB): " setcpu_ram
     read -e -i 1 -p "Set core CPU: " setcpu_core
@@ -153,9 +159,12 @@ case $choice in
       exit
     fi
 
-    source "$CONFIG_FILE"
     kill_qemu
-
+    source "$CONFIG_FILE"
+if [ -z "$vncpassword" ]; then
+  read -e -i "pass123" -p "Set your VNC password: " vncpassword
+  echo "vncpassword=$vncpassword" >> "$CONFIG_FILE"
+fi
     qemu-system-x86_64 \
       -m "$setcpu_ram" \
       -smp "$setcpu_core" \
