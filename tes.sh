@@ -105,7 +105,7 @@ case $choice in
     if ! command -v qemu-system-x86_64 &>/dev/null; then
       echo "Silahkan pilih no 1 terlebih dahulu karena QEMU belum terinstal."
       pause
-      exit
+      continue
     fi
     kill_qemu
     source "$CONFIG_FILE"
@@ -156,7 +156,7 @@ fi
     if ! command -v qemu-system-x86_64 &>/dev/null; then
       echo "Silahkan pilih no 1 terlebih dahulu karena QEMU belum terinstal."
       pause
-      exit
+      continue
     fi
 
     kill_qemu
