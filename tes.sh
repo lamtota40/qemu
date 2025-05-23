@@ -42,7 +42,7 @@ else
     virt_support="Not support Virtualization(disable)"
 fi
 
-  echo "Type            : $virt_type" | $virt_support
+  echo "Type            : $virt_type | $virt_support"
 
   read mem_total mem_used <<< $(free -m | awk '/^Mem:/ {print $2, $3}')
   mem_free=$((mem_total - mem_used))
