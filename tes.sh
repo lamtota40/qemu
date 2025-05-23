@@ -29,7 +29,19 @@ display_info() {
   if [[ "$virt_type" == "none" ]]; then
     virt_type="Bare Metal"
   fi
-  echo "Type            : kvm | $virt_type"
+
+if egrep -q '(vmx|svm)' /proc/cpuinfo; then
+    # cek modul intel atau amd
+    if lsmod | grep -q 'kvm_intel' || lsmod | grep -q 'kvm_amd'; then
+        virt_support="support Virtualization(enable)"
+    else
+        virt_support="support Virtualization(disable)"
+    fi
+else
+    virt_support="Not support Virtualization(disable)"
+fi
+
+  echo "Type            : $virt_type" | $virt_support
 
   read mem_total mem_used <<< $(free -m | awk '/^Mem:/ {print $2, $3}')
   mem_free=$((mem_total - mem_used))
@@ -93,7 +105,6 @@ case $choice in
     echo "setcpu_core=$setcpu_core" >> "$CONFIG_FILE"
     echo "disk_image=$disk_image" >> "$CONFIG_FILE"
     echo "iso_url=$iso_url" >> "$CONFIG_FILE"
-    echo "external_disk=external_hdd.qcow2" >> "$CONFIG_FILE"
 
     if [ ! -f mini.iso ]; then
       wget "$LINKISO" -O mini.iso
