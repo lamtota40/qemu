@@ -31,7 +31,6 @@ display_info() {
   fi
 
 if egrep -q '(vmx|svm)' /proc/cpuinfo; then
-    # cek modul intel atau amd
     if lsmod | grep -q 'kvm_intel' || lsmod | grep -q 'kvm_amd'; then
         virt_support="support Virtualization(enable)"
     else
