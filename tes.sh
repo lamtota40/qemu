@@ -8,6 +8,17 @@ source "$CONFIG_FILE" 2>/dev/null || touch "$CONFIG_FILE"
 pause() {
   read -p "Press Enter to return to the menu..."
 }
+# Fungsi kill
+kill(){
+pkill qemu-system-x86_64
+QEMU_PIDS=$(ps aux | grep '[q]emu-system' | awk '{print $2}')
+if [ -z "$QEMU_PIDS" ]; then
+  echo "Tidak ada proses QEMU yang ditemukan."
+else
+  kill -9 $QEMU_PIDS
+  echo "Ditemukan dengam PID: $QEMU_PIDS dan berhasil kill."
+fi
+}
 
 # Fungsi tampilkan info sistem
 display_info() {
@@ -96,6 +107,7 @@ case $choice in
       pause
       exit
     fi
+    kill
     LINKISO="https://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/mini.iso"
     read -e -i 1024 -p "Set RAM (MB): " setcpu_ram
     read -e -i 1 -p "Set core CPU: " setcpu_core
@@ -142,7 +154,7 @@ case $choice in
     fi
 
     source "$CONFIG_FILE"
-    pkill qemu-system-x86_64
+    kill
 
     qemu-system-x86_64 \
       -m "$setcpu_ram" \
