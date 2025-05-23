@@ -25,10 +25,12 @@ display_info() {
   cpu_speed=$(awk -F: '/MHz/ {print int($2); exit}' /proc/cpuinfo)
   echo "CPU Core/Speed  : $cpu_core core | ${cpu_speed}MHz"
 
-  virt_type=$(systemd-detect-virt)
-  if [[ "$virt_type" == "none" ]]; then
-    virt_type="Bare Metal"
-  fi
+virt_type=$(systemd-detect-virt 2>/dev/null)
+if [ -z "$virt_type" ]; then
+    virt_type="Unknown"
+elif [ "$virt_type" == "none" ]; then
+    virt_type="BareMetal"
+fi
 
 if egrep -q '(vmx|svm)' /proc/cpuinfo; then
     if lsmod | grep -q 'kvm_intel' || lsmod | grep -q 'kvm_amd'; then
