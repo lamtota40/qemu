@@ -116,12 +116,12 @@ read -e -i "ubuntu" -p "Set file name: " filename
 fileqcow="$HOME/${filename}.qcow2"
     qemu-img create -f qcow2 "$fileqcow" "${disk_size}G"
     echo "Created disk: $fileqcow with size ${disk_size}G"
-    echo "disk_image=$fileqcow" > "$CONFIG_FILE"
+    echo "disk_image=$fileqcow" >> "$CONFIG_FILE"
     
     read -e -i "pass123" -p "Set your VNC password: " vncpassword
     mkdir -p /root/.vnc
     x11vnc -storepasswd "$vncpassword" /root/.vnc/passwd
-    echo "vncpassword=$vncpassword" > "$CONFIG_FILE"
+    echo "vncpassword=$vncpassword" >> "$CONFIG_FILE"
     pause
     ;;
   2)
