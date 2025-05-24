@@ -10,7 +10,6 @@ pause() {
 
 kill_qemu(){
 pkill qemu-system-x86_64
-sleep 3
 QEMU_PIDS=$(ps aux | grep '[q]emu-system' | awk '{print $2}')
 if [ -z "$QEMU_PIDS" ]; then
   echo "Tidak ada proses QEMU yang ditemukan."
