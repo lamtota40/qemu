@@ -105,7 +105,6 @@ case $choice in
     while true; do
   read -p "Set disk size (GB): " disk_size
 if [[ "$disk_size" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
-  echo "OK"
   break
 else
   echo "Input tidak valid. Hanya angka dan titik sebagai desimal."
