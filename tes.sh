@@ -4,13 +4,13 @@
 CONFIG_FILE="./setqemu.conf"
 source "$CONFIG_FILE" 2>/dev/null || touch "$CONFIG_FILE"
 
-# Fungsi pause
 pause() {
   read -p "Press Enter to return to the menu..."
 }
-# Fungsi kill
+
 kill_qemu(){
 pkill qemu-system-x86_64
+sleep 3
 QEMU_PIDS=$(ps aux | grep '[q]emu-system' | awk '{print $2}')
 if [ -z "$QEMU_PIDS" ]; then
   echo "Tidak ada proses QEMU yang ditemukan."
@@ -28,9 +28,9 @@ display_info() {
 
 QEMU_PIDS=$(ps aux | grep '[q]emu-system' | awk '{print $2}')
 if [ -z "$QEMU_PIDS" ]; then
-  stat="Not Runing"
+  stat="Not Running"
 else
-  stat="Runing PID: $QEMU_PIDS"
+  stat="Running PID: $QEMU_PIDS"
 fi
 
   if command -v qemu-system-x86_64 &> /dev/null; then
@@ -44,20 +44,20 @@ fi
   echo "CPU Core/Speed  : $cpu_core core | ${cpu_speed}MHz"
 
 virt_type=$(systemd-detect-virt 2>/dev/null)
-if [ -z "$virt_type" ]; then
-    virt_type="Unknown"
-elif [ "$virt_type" == "none" ]; then
+  if [ "$virt_type" == "none" ]; then
     virt_type="BareMetal"
-fi
+  elif [ -z "$virt_type" ]; then
+    virt_type="Unknown"
+  fi
 
 if egrep -q '(vmx|svm)' /proc/cpuinfo; then
     if lsmod | grep -q 'kvm_intel' || lsmod | grep -q 'kvm_amd'; then
-        virt_support="support Virtualization(enable)"
+        virt_support="Support Virtualization(enable)"
     else
-        virt_support="support Virtualization(disable)"
+        virt_support="Support Virtualization(disable)"
     fi
 else
-    virt_support="Not support Virtualization(disable)"
+    virt_support="Not Support Virtualization(disable)"
 fi
 
   echo "Type            : $virt_type | $virt_support"
@@ -92,7 +92,7 @@ echo "1. Install QEMU"
 echo "2. Install OS"
 echo "3. Run OS"
 echo "4. Create Disk"
-echo "5. Stop Runing"
+echo "5. Stop Running"
 echo "0. Exit"
 echo "========================================"
 read -p "Enter your choice number: " choice
@@ -197,7 +197,7 @@ fi
       -boot c \
       -vnc :1,password \
       -k en-us \
-      -drive file=external_hdd.qcow2,format=qcow2,if=virtio
+      -drive file=external_hdd.qcow2,format=qcow2,if=virtio \
       -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::5911-:5900 \
       -device e1000,netdev=mynet \
       -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
