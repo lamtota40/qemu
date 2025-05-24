@@ -105,7 +105,7 @@ case $choice in
     while true; do
   read -p "Set disk size (GB): " disk_size
 if [[ "$disk_size" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
-  echo "Valid format: $disk_size GB"
+  echo "OK"
   break
 else
   echo "Input tidak valid. Hanya angka dan titik sebagai desimal."
@@ -233,7 +233,7 @@ fileqcow="$HOME/${filename}.qcow2"
     ;;
   5)
     echo "Stop QEMU:"
-    echo "1. Stop (system_powerdown)"
+    echo "1. Shutdown"
     echo "2. Forced Stop (possible data loss!)"
     read -p "Pilih sub-menu: " stop_choice
 
