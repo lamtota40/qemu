@@ -103,12 +103,12 @@ case $choice in
     clear
     echo "Instalasi Qemu telah selesai.."
     while true; do
-  read -e -i 18 -p "Set disk size (GB): " disk_size
-if [[ "$disk_size" =~ ^[0-9]+$ ]] && [ "$disk_size" -ge 10 ]; then
-    break
-  else
-    echo "Input tidak valid. Masukkan angka saja dan minimal 10GB."
-  fi
+  read -p "Set disk size (GB): " disk_size
+if [[ "$disk_size" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+  echo "Valid format: $disk_size GB"
+else
+  echo "Input tidak valid. Hanya angka dan titik sebagai desimal."
+fi
 done
 
 read -e -i "ubuntu" -p "Set file name: " filename
