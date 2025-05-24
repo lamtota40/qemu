@@ -177,6 +177,7 @@ fi
     ;;
   3)
     if ! command -v qemu-system-x86_64 &>/dev/null; then
+    if ! command -v qemu-system-x86_64 &>/dev/null; then
       echo "Silahkan pilih no 1 terlebih dahulu karena QEMU belum terinstal."
       pause
       continue
@@ -184,10 +185,12 @@ fi
 
     kill_qemu
     source "$CONFIG_FILE"
-if [ -z "$vncpassword" ]; then
-  read -e -i "pass123" -p "Set your VNC password: " vncpassword
-  echo "vncpassword=$vncpassword" >> "$CONFIG_FILE"
-fi
+
+    if [ -z "$setcpu_ram" ]; then read -e -i 1024 -p "Set RAM (MB): " setcpu_ram; fi
+    if [ -z "$setcpu_core" ]; then read -e -i 1 -p "Set core CPU: " setcpu_core; fi
+    if [ -z "$disk_image" ]; then read -e -i "$HOME/ubuntu.qcow2" -p "Set disk image path: " disk_image; fi
+    if [ -z "$vncpassword" ]; then read -e -i "pass123" -p "Set VNC password: " vncpassword; fi
+
     qemu-system-x86_64 \
       -m "$setcpu_ram" \
       -smp "$setcpu_core" \
