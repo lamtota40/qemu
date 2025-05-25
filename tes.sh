@@ -21,9 +21,9 @@ fi
 
 # Fungsi tampilkan info sistem
 display_info() {
-  echo "========================================"
+  echo "=================================================="
   echo "           QEMU MANAGER"
-  echo "========================================"
+  echo "=================================================="
 
 QEMU_PIDS=$(ps aux | grep '[q]emu-system' | awk '{print $2}')
 if [ -z "$QEMU_PIDS" ]; then
@@ -81,7 +81,7 @@ fi
   hdd_percent=$(df -h --total | awk '/total/ {print $5}')
   echo "HDD             : Usage: $hdd_usage ($hdd_percent) | Free: $hdd_free | Total: $hdd_total"
 
-  echo "========================================"
+  echo "=================================================="
 }
 while true; do
 clear
@@ -93,7 +93,7 @@ echo "3. Run OS"
 echo "4. Create Disk"
 echo "5. Stop Running"
 echo "0. Exit"
-echo "========================================"
+echo "=================================================="
 read -p "Enter your choice number: " choice
 
 case $choice in
@@ -201,7 +201,7 @@ fi
       -vnc :1,password \
       -k en-us \
       -drive file=external_hdd.qcow2,format=qcow2,if=virtio \
-      -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::5911-:5900 \
+      -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::5911-:5901 \
       -device e1000,netdev=mynet \
       -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
 
@@ -240,7 +240,7 @@ fileqcow="$HOME/${filename}.qcow2"
       1)
 if [ -S /tmp/qemu-monitor.sock ]; then
   echo "system_powerdown" | socat - UNIX-CONNECT:/tmp/qemu-monitor.sock
-  sleep 3
+  sleep 10
   if ps aux | grep -q '[q]emu-system'; then
     echo "Guest tidak shutdown, pakai fallback quit"
     echo "quit" | socat - UNIX-CONNECT:/tmp/qemu-monitor.sock
