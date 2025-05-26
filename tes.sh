@@ -216,12 +216,12 @@ fi
     ;;
   4)
   while true; do
-  read -e -i 18 -p "Set disk size (GB): " disk_size
-if [[ "$disk_size" =~ ^[0-9]+$ ]] && [ "$disk_size" -ge 10 ]; then
-    break
-  else
-    echo "Input tidak valid. Masukkan angka saja dan minimal 10GB."
-  fi
+ read -e -i 18 -p "Set disk size (GB): " disk_size
+if [[ "$disk_size" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+  break
+else
+  echo "Input tidak valid. Hanya angka dan titik sebagai desimal."
+fi
 done
 
 read -e -i "ubuntu" -p "Set file name: " filename
@@ -239,13 +239,7 @@ fileqcow="$HOME/${filename}.qcow2"
     case $stop_choice in
       1)
 if [ -S /tmp/qemu-monitor.sock ]; then
-  echo "system_powerdown" | socat - UNIX-CONNECT:/tmp/qemu-monitor.sock
-  sleep 10
-  if ps aux | grep -q '[q]emu-system'; then
-    echo "Guest tidak shutdown, pakai fallback quit"
-    echo "quit" | socat - UNIX-CONNECT:/tmp/qemu-monitor.sock
-    sleep 2
-    if ps aux | grep -q '[q]emu-system'; then
+  echo "system_powerdown" | socat - UNIX-CONNECT:/tmp/qemu-monito ps aux | grep -q '[q]emu-system'; then
       echo "QEMU masih berjalan. Silakan pilih submenu 2 (Forced stop) karena QEMU sedang crash."
     else
       echo "QEMU berhasil dihentikan dengan fallback quit."
