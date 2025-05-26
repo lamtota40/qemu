@@ -136,12 +136,12 @@ if [ -z "$vncpassword" ]; then
   echo "vncpassword=$vncpassword" >> "$CONFIG_FILE"
 fi
 
-    LINKISO="https://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/mini.iso"
+    LINKISO="https://archive.org/download/WinXPProSP3x86/en_windows_xp_professional_with_service_pack_3_x86_cd_vl_x14-73974.iso"
     read -e -i 1024 -p "Set RAM (MB): " setcpu_ram
     read -e -i 1 -p "Set core CPU: " setcpu_core
     read -e -i "$HOME/ubuntu.qcow2" -p "Set disk image path: " disk_image
     read -e -i "$LINKISO" -p "Set ISO URL: " iso_url
-    [ -f ubuntu.qcow2 ] || qemu-img create -f qcow2 ubuntu.qcow2 18.6G
+    [ -f ubuntu.qcow2 ] || qemu-img create -f qcow2 winxp.qcow2 37.2G
 
     echo "setcpu_ram=$setcpu_ram" >> "$CONFIG_FILE"
     echo "setcpu_core=$setcpu_core" >> "$CONFIG_FILE"
@@ -149,7 +149,7 @@ fi
     echo "iso_url=$iso_url" >> "$CONFIG_FILE"
 
     if [ ! -f mini.iso ]; then
-      wget -q --show-progress "$LINKISO" -O mini.iso
+      wget -q --show-progress "$LINKISO" -O winxp.iso
     fi
 
     qemu-system-x86_64 \
@@ -158,7 +158,7 @@ fi
       -cpu host \
       -enable-kvm \
       -hda "$disk_image" \
-      -cdrom mini.iso \
+      -cdrom winxp.iso \
       -boot d \
       -vnc :1,password \
       -k en-us \
@@ -187,7 +187,7 @@ fi
 
     if [ -z "$setcpu_ram" ]; then read -e -i 1024 -p "Set RAM (MB): " setcpu_ram; fi
     if [ -z "$setcpu_core" ]; then read -e -i 1 -p "Set core CPU: " setcpu_core; fi
-    if [ -z "$disk_image" ]; then read -e -i "$HOME/ubuntu.qcow2" -p "Set disk image path: " disk_image; fi
+    if [ -z "$disk_image" ]; then read -e -i "$HOME/winxp.qcow2" -p "Set disk image path: " disk_image; fi
     if [ -z "$vncpassword" ]; then read -e -i "pass123" -p "Set VNC password: " vncpassword; fi
     [ -f external_hdd.qcow2 ] || qemu-img create -f qcow2 external_hdd.qcow2 20G
 
@@ -201,7 +201,7 @@ fi
       -vnc :1,password \
       -k en-us \
       -drive file=external_hdd.qcow2,format=qcow2,if=virtio \
-      -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::5911-:5901 \
+      -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::3389-:3389 \
       -device e1000,netdev=mynet \
       -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
 
@@ -224,7 +224,7 @@ fi
     fi
   done
 
-  read -e -i "ubuntu" -p "Set file name: " filename
+  read -e -i "winxp" -p "Set file name: " filename
   fileqcow="$HOME/${filename}.qcow2"
   qemu-img create -f qcow2 "$fileqcow" "${disk_size}G"
   echo "Created disk: $fileqcow with size ${disk_size}G"
