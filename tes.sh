@@ -216,19 +216,20 @@ fi
     ;;
   4)
   while true; do
- read -e -i 18 -p "Set disk size (GB): " disk_size
-if [[ "$disk_size" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
-  break
-else
-  echo "Input tidak valid. Hanya angka dan titik sebagai desimal."
-fi
+    read -e -i 18 -p "Set disk size (GB): " disk_size
+    if [[ "$disk_size" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+      break
+    else
+      echo "Input tidak valid. Hanya angka dan titik sebagai desimal."
+    fi
+  done
 
-read -e -i "ubuntu" -p "Set file name: " filename
-fileqcow="$HOME/${filename}.qcow2"
-    qemu-img create -f qcow2 "$fileqcow" "${disk_size}G"
-    echo "Created disk: $fileqcow with size ${disk_size}G"
-    pause
-    ;;
+  read -e -i "ubuntu" -p "Set file name: " filename
+  fileqcow="$HOME/${filename}.qcow2"
+  qemu-img create -f qcow2 "$fileqcow" "${disk_size}G"
+  echo "Created disk: $fileqcow with size ${disk_size}G"
+  pause
+  ;;
   5)
     echo "Stop QEMU:"
     echo "1. Shutdown"
