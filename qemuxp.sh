@@ -139,7 +139,7 @@ fi
     LINKISO="https://archive.org/download/WinXPProSP3x86/en_windows_xp_professional_with_service_pack_3_x86_cd_vl_x14-73974.iso"
     read -e -i 1024 -p "Set RAM (MB): " setcpu_ram
     read -e -i 1 -p "Set core CPU: " setcpu_core
-    read -e -i "$HOME/ubuntu.qcow2" -p "Set disk image path: " disk_image
+    read -e -i "$HOME/winxp.qcow2" -p "Set disk image path: " disk_image
     read -e -i "$LINKISO" -p "Set ISO URL: " iso_url
     [ -f ubuntu.qcow2 ] || qemu-img create -f qcow2 winxp.qcow2 37.2G
 
@@ -148,7 +148,7 @@ fi
     echo "disk_image=$disk_image" >> "$CONFIG_FILE"
     echo "iso_url=$iso_url" >> "$CONFIG_FILE"
 
-    if [ ! -f mini.iso ]; then
+    if [ ! -f winxp.iso ]; then
       wget -q --show-progress "$LINKISO" -O winxp.iso
     fi
 
