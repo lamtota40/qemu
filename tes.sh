@@ -222,7 +222,6 @@ if [[ "$disk_size" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
 else
   echo "Input tidak valid. Hanya angka dan titik sebagai desimal."
 fi
-done
 
 read -e -i "ubuntu" -p "Set file name: " filename
 fileqcow="$HOME/${filename}.qcow2"
