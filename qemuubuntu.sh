@@ -239,13 +239,12 @@ fi
     case $stop_choice in
       1)
 if [ -S /tmp/qemu-monitor.sock ]; then
-  echo "system_powerdown" | socat - UNIX-CONNECT:/tmp/qemu-monito ps aux | grep -q '[q]emu-system'; then
-      echo "QEMU masih berjalan. Silakan pilih submenu 2 (Forced stop) karena QEMU sedang crash."
-    else
-      echo "QEMU berhasil dihentikan dengan fallback quit."
-    fi
+  echo "system_powerdown" | socat - UNIX-CONNECT:/tmp/qemu-monitor.sock
+  sleep 5
+  if ps aux | grep -q '[q]emu-system'; then
+    echo "QEMU masih berjalan. Silakan pilih submenu 2 (Forced stop) karena QEMU sedang crash."
   else
-    echo "Perintah shutdown telah dikirim ke QEMU dan berhasil."
+    echo "QEMU berhasil dihentikan dengan fallback quit."
   fi
 else
   echo "Socket /tmp/qemu-monitor.sock tidak ditemukan. QEMU mungkin tidak berjalan."
