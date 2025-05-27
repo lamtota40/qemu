@@ -199,10 +199,11 @@ qemu-system-x86_64 \
       -hda "$disk_image" \
       -boot c \
       -vnc :1,password \
+      -vga std \
       -k en-us \
-      -drive file=external_hdd.qcow2,format=qcow2,if=virtio \
       -netdev user,id=mynet,hostfwd=tcp::2222-:22,hostfwd=tcp::3389-:3389 \
       -device e1000,netdev=mynet \
+      -rtc base=localtime \
       -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
 
     sleep 5
