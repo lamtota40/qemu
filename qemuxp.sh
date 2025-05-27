@@ -155,7 +155,7 @@ fi
 qemu-system-x86_64 \
     -m "$setcpu_ram" \
     -smp "$setcpu_core" \
-    -cpu pentium \
+    -cpu host \
     -enable-kvm \
     -hda "$disk_image" \
     -cdrom grml.iso \
