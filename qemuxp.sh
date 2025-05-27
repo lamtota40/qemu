@@ -141,7 +141,7 @@ fi
     read -e -i 1 -p "Set core CPU: " setcpu_core
     read -e -i "$HOME/winxp.qcow2" -p "Set disk image path: " disk_image
     read -e -i "$LINKISO" -p "Set ISO URL: " iso_url
-    [ -f ubuntu.qcow2 ] || qemu-img create -f qcow2 winxp.qcow2 37.2G
+    [ -f winxp.qcow2 ] || qemu-img create -f qcow2 winxp.qcow2 37.2G
 
     echo "setcpu_ram=$setcpu_ram" >> "$CONFIG_FILE"
     echo "setcpu_core=$setcpu_core" >> "$CONFIG_FILE"
