@@ -149,23 +149,23 @@ fi
     echo "iso_url=$iso_url" >> "$CONFIG_FILE"
 
     if [ ! -f winxp.iso ]; then
-      wget -q --show-progress "$LINKISO" -O winxp.iso
+      #wget -q --show-progress "$LINKISO" -O winxp.iso
     fi
-
-    qemu-system-x86_64 \
-      -m "$setcpu_ram" \
-      -smp "$setcpu_core" \
-      -cpu host \
-      -enable-kvm \
-      -hda "$disk_image" \
-      -cdrom winxp.iso \
-      -boot d \
-      -vnc :1,password \
-      -k en-us \
-      -net nic \
-      -net user \
-      -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
-
+    
+qemu-system-x86_64 \
+    -m "$setcpu_ram" \
+    -smp "$setcpu_core" \
+    -cpu pentium \
+    -enable-kvm \
+    -hda "$disk_image" \
+    -cdrom grml.iso \
+    -boot d \
+    -vnc :1,password \
+    -vga std \
+    -net nic \
+    -net user \
+    -rtc base=localtime \
+    -monitor unix:/tmp/qemu-monitor.sock,server,nowait &
     sleep 5
     {
       echo "change vnc password"
