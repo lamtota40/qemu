@@ -149,7 +149,7 @@ fi
     echo "iso_url=$iso_url" >> "$CONFIG_FILE"
 
     if [ ! -f winxp.iso ]; then
-      #wget -q --show-progress "$LINKISO" -O winxp.iso
+      wget -q --show-progress "$LINKISO" -O winxp.iso
     fi
     
 qemu-system-x86_64 \
